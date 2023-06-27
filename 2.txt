@@ -1,0 +1,6 @@
+=== You chose shape number: 2
+
+=== Your Perimeter is: 12.0
+
+=== Your Area is: 9.0
+
