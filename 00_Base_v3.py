@@ -57,37 +57,6 @@ def shape_checker(question):
             print("Please enter a valid integer or shape name!")
 
 
-# asks the user whether they wish to be told the instructions
-def instructions_yes_no():
-    want_instructions = yes_no("Do you want to read the instructions? ")
-
-    if want_instructions == "yes":
-        print(''' 
-*** Instructions ***\n
-This program works out the area and perimeter of a desired shape. 
-It will ask you which shape you wish to find the area and perimeter of.
-Then ask you for the values of the necessary sides needed to solve the area and perimeter.
-
-(This information will be automatically saved in a txt file.)\n ''')
-
-
-# checks with the user whether they understand the instructions and if they wish to continue
-def continue_yes_no(question):
-    while True:
-        response = input(question).lower()
-        error = "Please enter yes or no!"
-
-        if response == "yes" or response == "y":
-            break
-
-        elif response == "no" or response == "n":
-            print("\nThank you for considering this program!")
-            quit()
-
-        else:
-            print(error)
-
-
 # converts a number to a specified significant figure
 def significant_figure(number, significant_figures):
     if number == 0:
@@ -96,19 +65,27 @@ def significant_figure(number, significant_figures):
 
 
 # finds the area and perimeter of a triangle
+# finds the area and perimeter of a triangle
 def choice_triangle():
-    base_triangle = num_check("Enter the base length: ", "Please enter a valid positive integer e.g. 4", float)
-    height_triangle = num_check("Enter the height: ", "Please enter a valid positive integer e.g. 4", float)
-    side_a_triangle = num_check("Enter the length of side a: ", "Please enter a valid positive integer  e.g. 4", float)
-    side_b = num_check("Enter the length of side b: ", "Please enter a valid positive integer e.g. 4", float)
+    while True:
+        base_triangle = num_check("Enter the base length: ", "Please enter a valid positive number (e.g., 4): ", float)
+        side_a_triangle = num_check("Enter the length of side a: ", "Please enter a valid positive number (e.g., 4): ",
+                                    float)
+        side_b = num_check("Enter the length of side b: ", "Please enter a valid positive number (e.g., 4): ", float)
 
-    perimeter = side_a_triangle + side_b + base_triangle
-    area = 0.5 * base_triangle * height_triangle
+        # Check if sides form a triangle
+        if base_triangle + side_a_triangle > side_b and side_a_triangle + side_b > base_triangle and \
+                side_b + base_triangle > side_a_triangle:
+            perimeter = side_a_triangle + side_b + base_triangle
+            area = (base_triangle * side_a_triangle) / 2
 
-    perimeter = significant_figure(perimeter, 4)
-    area = significant_figure(area, 4)
+            perimeter = significant_figure(perimeter, 4)
+            area = significant_figure(area, 4)
 
-    return perimeter, area
+            return perimeter, area
+
+        else:
+            print("The given sides do not form a triangle. Please enter valid side lengths.")
 
 
 # finds the area and perimeter of a square
@@ -174,14 +151,28 @@ def choice_oval():
 # main routine goes here
 
 # asks user if they want instructions
-instructions_yes_no()
+want_instructions = yes_no("Do you want to read the instructions? ")
+
+# asks the user whether they wish to be told the instructions
+if want_instructions == "yes":
+    print(''' 
+*** Instructions ***\n
+This program works out the area and perimeter of a desired shape. 
+It will ask you which shape you wish to find the area and perimeter of.
+Then ask you for the values of the necessary sides needed to solve the area and perimeter.
+
+(This information will be automatically saved in a txt file.)\n ''')
 
 # asks user if they wish to continue with the program
-continue_yes_no("Do you understand and wish to continue? (y/n): ")
+continue_yes_no = yes_no("Do you understand and wish to continue? (y/n): ")
+if continue_yes_no == "yes":
+    print()
+else:
+    print("Thank you for considering this program. Please try again!")
 
 # determines and returns which shape the user wishes
 shape_choice = shape_checker('''\nPlease enter which shape you wish to find the area and perimeter of:
- 
+
 1. Triangle
 2. Square
 3. Rectangle
@@ -208,7 +199,6 @@ elif shape_choice == "oval":
 
 else:
     print("Invalid choice! Please enter a valid shape.")
-
 
 heading_txt = "\n***** AREA PERIMETER CALCULATOR *****"
 perimeter_heading = "Perimeter:"
