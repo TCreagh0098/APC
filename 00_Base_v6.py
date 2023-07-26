@@ -98,7 +98,7 @@ def continue_yes_no(question):
 def significant_figure(number, significant_figures):
     if number == 0:
         return 0
-    return round(number, significant_figures - math.floor(math.log10(abs(number))) - 1)
+    return round(number, significant_figures - int(math.floor(math.log10(abs(number)))) - 1)
 
 
 # finds the area and perimeter of a triangle
@@ -108,9 +108,6 @@ def choice_triangle():
         side_a_triangle = num_check("Enter the length of side a: ", "Please enter a valid positive number (e.g., 4): ",
                                     float)
         side_b = num_check("Enter the length of side b: ", "Please enter a valid positive number (e.g., 4): ", float)
-
-        if base_triangle == "?" or side_a_triangle == "?" or side_b == "?":
-            return "?", "?"
 
         # Check if sides form a triangle
         if base_triangle + side_a_triangle > side_b and side_a_triangle + side_b > base_triangle and \
@@ -131,11 +128,13 @@ def choice_triangle():
 def choice_square_or_rectangle(shape):
     length = num_check("Enter the side length: ", "Please enter a valid positive number (e.g., 4): ", float)
 
-    if length == "?":
-        return "?", "?"
-
-    perimeter = 4 * length
-    area = length * length
+    if shape == "square":
+        perimeter = 4 * length
+        area = length * length
+    else:  # It's a rectangle
+        width = num_check("Enter the side width: ", "Please enter a valid positive number (e.g., 4): ", float)
+        perimeter = 2 * (length + width)
+        area = length * width
 
     perimeter = significant_figure(perimeter, 4)
     area = significant_figure(area, 4)
@@ -214,6 +213,10 @@ Select shape: ''')
 
     else:
         print("Invalid choice! Please enter a valid shape.")
+
+    # Format the perimeter and area to 4 significant figures
+    perimeter = significant_figure(perimeter, 4)
+    area = significant_figure(area, 4)
 
     calculation_history.loc[len(calculation_history)] = [shape_choice.capitalize(), perimeter, area]
 
